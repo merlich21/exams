@@ -6,7 +6,7 @@
 /*   By: merlich <merlich@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 19:02:19 by merlich           #+#    #+#             */
-/*   Updated: 2022/06/08 21:59:11 by merlich          ###   ########.fr       */
+/*   Updated: 2022/06/08 22:14:27 by merlich          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,24 +43,30 @@ static void	ft_dup2(int in, int out)
 		ft_print_error_fatal();
 }
 
-static void	ft_handle_p1(int p1[2], int p2[2],  int num_of_cmd, int last)
+static void	ft_handle_pipes(int p1[2], int p2[2],  int num_of_cmd, int last, int opend1, int opend2)
 {
-	static int	opend1 = 0;
-	static int	opend2 = 0;
+	// static int	opend1 = 0;
+	// static int	opend2 = 0;
 
-	if (num_of_cmd != last && num_of_cmd % 2 == 0)
+	printf("k = %d\n", num_of_cmd);
+	printf("last = %d\n", last);
+	if (num_of_cmd == 1 && num_of_cmd == last)
+	{
+		return ;
+	}
+	if (!opend1 && num_of_cmd != last && num_of_cmd % 2 == 0)
 	{
 		if (pipe(p1))
 			ft_print_error_fatal();
 		opend1 = 1;
 	}
-	if (num_of_cmd != last && num_of_cmd % 2)
+	else if (!opend2 && num_of_cmd != last && num_of_cmd % 2)
 	{
 		if (pipe(p2))
 			ft_print_error_fatal();
 		opend2 = 1;
 	}
-	if (num_of_cmd == 0)
+	if (num_of_cmd == 1 && num_of_cmd != last)
 		ft_dup2(0, p1[1]);
 	if (num_of_cmd == last && num_of_cmd % 2)
 		ft_dup2(p1[0], 1);
@@ -84,7 +90,7 @@ static void	ft_handle_p1(int p1[2], int p2[2],  int num_of_cmd, int last)
 	}
 }
 
-void	ft_exec_many_cmds(int p1[2], int p2[2], char **cmd_line, int k, int cmds_num, char **envp)
+void	ft_exec_many_cmds(int p1[2], int p2[2], char **cmd_line, int k, int cmds_num, char **envp, int opend1, int opend2)
 {
 	pid_t	pid;
 	
@@ -93,7 +99,7 @@ void	ft_exec_many_cmds(int p1[2], int p2[2], char **cmd_line, int k, int cmds_nu
 		ft_print_error_fatal();
 	else if (pid == 0)
 	{
-		// ft_handle_p1(p1, p2, k, cmds_num);
+		ft_handle_pipes(p1, p2, k, cmds_num, opend1, opend2);
 		execve(cmd_line[0], cmd_line, envp);
 		ft_print_execve_fail(cmd_line[0]);
 	}

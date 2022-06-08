@@ -22,6 +22,6 @@ char	**ft_build_cmd_line(char **argv, int *i);
 
 /* exec_cmds.c */
 void	ft_exec_one_cmd(char **cmd_line, char **envp);
-void	ft_exec_many_cmds(int p1[2], int p2[2], char **cmd_line, int k, int cmds_num, char **envp);
+void	ft_exec_many_cmds(int p1[2], int p2[2], char **cmd_line, int k, int cmds_num, char **envp, int opend1, int opend2);
 
 #endif

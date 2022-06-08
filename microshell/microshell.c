@@ -6,7 +6,7 @@
 /*   By: merlich <merlich@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 21:44:08 by merlich           #+#    #+#             */
-/*   Updated: 2022/06/08 21:53:46 by merlich          ###   ########.fr       */
+/*   Updated: 2022/06/08 22:16:40 by merlich          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,21 @@ int	main(int argc, char **argv, char **envp)
 	int		p2[2];
 	char	**cmd_line;
 	int		m;
+	static int	opend1 = 0;
+	static int	opend2 = 0;
 
 	i = 1;
-	k = 0;
+	k = 1;
 	cmds_num = ft_count_cmds(argv);
 	printf("cmds_num = %d\n", cmds_num);
 	if (cmds_num)
 	{
+		if (pipe(p1))
+			ft_print_error_fatal();
+		opend1 = 1;
+		if (pipe(p2))
+			ft_print_error_fatal();
+		opend2 = 1;
 		while (argv[i])
 		{
 			cmd_line = ft_build_cmd_line(argv, &i);
@@ -38,7 +46,7 @@ int	main(int argc, char **argv, char **envp)
 			// 	ft_print_error_fatal();
 			else
 			{
-				ft_exec_many_cmds(p1, p2, cmd_line, k, cmds_num, envp);
+				ft_exec_many_cmds(p1, p2, cmd_line, k, cmds_num, envp, opend1, opend2);
 				k++;
 				if (!strcmp(argv[i - 1], ";"))
 				{
@@ -56,8 +64,8 @@ int	main(int argc, char **argv, char **envp)
 			free(cmd_line);
 		}
 		k = -1;
-		while (++k < cmds_num - 1)
-			waitpid(-1, NULL, 0);
+		// while (++k < cmds_num)
+		// 	waitpid(-1, NULL, 0);
 	}
 	return (0);
 }
