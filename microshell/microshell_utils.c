@@ -6,7 +6,7 @@
 /*   By: merlich <merlich@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 18:59:07 by merlich           #+#    #+#             */
-/*   Updated: 2022/06/08 21:29:19 by merlich          ###   ########.fr       */
+/*   Updated: 2022/06/08 21:56:00 by merlich          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,16 +32,12 @@ int	ft_count_cmds(char **str)
 
 	i = 1;
 	num = 1;
-	// if (str[1])
-	// {
-		// num = 1;
-		while (str[i])
-		{
-			if (!strcmp(str[i], "|") || !strcmp(str[i], ";"))
-				num++;
-			i++;
-		}
-	// }
+	while (str[i])
+	{
+		if (!strcmp(str[i], "|") || !strcmp(str[i], ";"))
+			num++;
+		i++;
+	}
 	return (num);
 }
 

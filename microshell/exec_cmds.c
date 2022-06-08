@@ -6,7 +6,7 @@
 /*   By: merlich <merlich@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 19:02:19 by merlich           #+#    #+#             */
-/*   Updated: 2022/06/08 21:36:49 by merlich          ###   ########.fr       */
+/*   Updated: 2022/06/08 21:59:11 by merlich          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,12 +89,12 @@ void	ft_exec_many_cmds(int p1[2], int p2[2], char **cmd_line, int k, int cmds_nu
 	pid_t	pid;
 	
 	pid = fork();
-	if (pid == 0)
+	if (pid < 0)
+		ft_print_error_fatal();
+	else if (pid == 0)
 	{
 		// ft_handle_p1(p1, p2, k, cmds_num);
 		execve(cmd_line[0], cmd_line, envp);
 		ft_print_execve_fail(cmd_line[0]);
 	}
-	else if (pid < 0)
-		ft_print_error_fatal();
 }
